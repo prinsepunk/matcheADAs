@@ -1,0 +1,161 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root{
+    --mainColor: #363E59;
+    --textColor: #ffafcc;
+}
+
+                        /* MAIN PAGE */
+
+body{
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(-45deg, #C9CAD9, #D1D2F9, #A3BCF9, #7796CB);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+header{
+    display: flex;
+    justify-content: center;
+    padding: 3%;
+    margin-top: 10%;
+}
+
+h1{
+    font-family: 'Bubblegum Sans', cursive;
+    color: var(--textColor);
+    font-size: 3em;
+    -webkit-text-stroke: 1px var(--mainColor);
+}
+
+article{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-box{
+    display: flex;
+    border: 1px solid var(--mainColor);
+    border-radius: 5px;
+    width: 300px;
+    height: 50px;
+    padding: 10px;
+    background-color: var(--mainColor);
+    color: var(--textColor);
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.4em;
+    margin-top: 2%;
+    margin-bottom: 4%;
+    justify-content: space-between;
+}
+
+.info-buttons button{
+    border: none;
+    background-color: transparent;
+    padding: 5px 5px;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--textColor);
+}
+
+.info, .info-buttons{
+    display: flex;
+}
+
+.info p{
+    margin-right: 10px;
+}
+
+.box-container{
+    border: 1px solid black;
+    height: 50vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+
+.container{
+    width: 250px;
+    height: 250px;
+    border-radius: 5px;
+    margin-bottom: 10%;
+    padding: 10px;
+    position: relative;
+}
+
+.container p{
+    font-size: 35px;
+    text-align: center;
+    cursor: pointer;
+    padding: 5px;
+    position: absolute;
+}
+
+@media(min-width: 500px){
+    header{
+        margin-top: 4%;
+    }
+    h1{
+        font-size: 4em;
+    }
+    .info-box{
+        margin-top: 4%;
+        width: 400px;
+    }
+    .container p{
+        font-size: 3em;
+    }
+}
+
+@media(min-width: 700px){
+    header{
+        margin-top: 2%;
+    }
+    h1{
+        font-size: 5em;
+    }
+    .info-box{
+        margin-top: 2%;
+        width: 500px;
+    }
+}
+
+/* TIMER */
+
+.timer{
+    margin-top: 15px;
+    border: 1px solid var(--mainColor);
+    border-radius: 5px;
+    padding: 10px;
+    background-color: var(--mainColor);
+    color: var(--textColor);
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 1.4em;
+    margin-bottom: 3%;
+    width: 90px;
+    display: flex;
+    justify-content: center;
+}
+
+.timer i{
+    margin-right: 5px;
+}

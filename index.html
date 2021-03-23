@@ -7,9 +7,43 @@
     <title>MatcheADAs</title>
 
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+
+    <!-- Library for emojis -->
+    <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    
+    <header>
+        <h1>MatcheADAs</h1>
+    </header>
+    <article>
+        <section class="info-box">
+            <div class="info">
+                <p>Combo x 
+                    <span>1</span>
+                </p>
+                <p>Puntos:
+                    <span>0</span>
+                </p> 
+            </div>
+            <div class="info-buttons">
+                <button id="information"><i class="fas fa-info-circle"></i></button>
+                <button id="newGame"><i class="fas fa-redo-alt"></i></button>
+            </div>
+            
+        </section>
+        <div id="container" class="container"></div>
+        <section class="timer"><i class="far fa-clock"></i><span id="timer">0:30</span></section>
+    </article>
+
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script src="js/app.js"></script>
 </body>
