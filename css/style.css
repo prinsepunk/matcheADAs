@@ -111,6 +111,10 @@ article{
     cursor: pointer;
 }
 
+.selected{
+    border: 1px solid var(--textColor);
+}
+
 @media(min-width: 500px){
     header{
         margin-top: 4%;
