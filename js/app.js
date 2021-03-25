@@ -45,7 +45,7 @@ const squareGenerator = (i, j) =>{
     square.innerText = gridJS[i][j];
     square.style.top = `${i * 50}px`;
     square.style.left = `${j * 50}px`;
-    // square.addEventListener('click', selectedItem)
+    square.addEventListener('click', selectedItem)
     grid.appendChild(square);
 }
 
