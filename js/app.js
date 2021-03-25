@@ -1,14 +1,15 @@
 const grid = document.getElementById('container');
 const information = document.getElementById('information');
 const newGame = document.getElementById('newGame');
-let welcomeModal = true;
-
-
-
-                    // GRID GENERATOR
-
 let gridJS = [];
 let items = ["📱", "💻", "🖨", "📸", "📹", "⌚️"];
+const squares = [];
+let lv;
+let welcomeModal = true;
+let points = 0;
+let time;
+
+                    // GRID GENERATOR
 
 const getRandom = (items) => Math.floor(Math.random() * items.length);
 const getItemRandom = (items) => items[getRandom(items)];
@@ -22,6 +23,10 @@ const createBoard = (lv) =>{
             gridJS[i][j] = getItemRandom(items);
         }
     }
+    time = 30;
+    gameTime(time);
+    gridToHTML(lv);
+    return lv;
 }
 
 // Print array into HTML
@@ -258,14 +263,14 @@ welcome();
 
 // Information button modal
 information.addEventListener('click', () =>{
-    // timeStop();
+    timeStop();
     welcomeModal = false;
     welcome();
 })
 
 // New Game button modal
 newGame.addEventListener('click', ()=>{
-    // timeStop();
+    timeStop();
     swal("¿Reiniciar juego?", "¡Perderás todo tu puntaje acumulado!", {
         buttons: {
             cancel: "Cancelar",
@@ -293,7 +298,7 @@ newGame.addEventListener('click', ()=>{
 
 // Finish game modal
 const finishGameModal = () =>{
-timeStop();
+    timeStop();
     swal("¡Juego terminado!", `Puntaje final: ${points}`, {
                 buttons: {
                     new: {
@@ -320,4 +325,26 @@ timeStop();
                         break;
                 }
             });
+}
+
+                    // TIMER
+let stop;
+// Start timer
+const gameTime = () => {
+    stop = setInterval(() => {
+        if (time > 9) {
+            timer.innerHTML = `0:${time}`
+            time--
+        } else if(time > -1){
+            timer.innerHTML = `0:0${time}`
+            time--
+        }else{
+            finishGameModal();
+        }
+    }, 1000);
+}
+
+// Stop timer
+const timeStop = () =>{
+    clearInterval(stop);
 }
