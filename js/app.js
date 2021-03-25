@@ -49,6 +49,64 @@ const squareGenerator = (i, j) =>{
     grid.appendChild(square);
 }
 
+                    // GAME FUNCTIONS
+
+// Select each item
+const selectedItem = (e) =>{
+    let click = document.querySelector('.selected');
+    if(click){
+        if (adjacent(click, e.target)) {
+            swapElement(click, e.target);
+            click.classList.remove('selected');
+        } else{
+            click.classList.remove('selected');
+            e.target.classList.add('selected');
+        }
+    } else{
+        e.target.classList.add('selected');
+    }
+    console.log(score)
+}
+
+// Check if they're adjacents
+const adjacent = (square1, square2)=>{
+    const datax1 = Number(square1.dataset.x);
+    const datay1 = Number(square1.dataset.y);
+    const datax2 = Number(square2.dataset.x);
+    const datay2 = Number(square2.dataset.y);
+    if(
+        (datax1 === datax2 && datay1 === datay2 + 1) ||
+        (datax1 === datax2 && datay1 === datay2 - 1) ||
+        (datay1 === datay2 && datax1 === datax2 + 1) ||
+        (datay1 === datay2 && datax1 === datax2 - 1)
+    ){
+        return true
+    }else{
+        return false
+    }
+}
+
+// Swap items
+const swapElement = (square1, square2) =>{
+    const datax1 = Number(square1.dataset.x);
+    const datay1 = Number(square1.dataset.y);
+    const datax2 = Number(square2.dataset.x);
+    const datay2 = Number(square2.dataset.y);
+
+    let tempVar = gridJS[datax1][datay1];
+    gridJS[datax1][datay1] = gridJS[datax2][datay2];
+    gridJS[datax2][datay2] = tempVar;
+    
+    if(datax1 === datax2 && (datay1 === datay2 + 1 || datay1 === datay2 -1)){
+        square1.innerHTML = gridJS[datax1][datay1];
+        square2.innerHTML = gridJS[datax2][datay2];
+
+    } else if(datay1 === datay2 && (datax1 === datax2 +1 || datax1 === datax2 -1)){
+        square1.innerHTML = gridJS[datax1][datay1];
+        square2.innerHTML = gridJS[datax2][datay2];
+    }
+}
+
                      // FUNCTIONS: MODALES
 
 // Information and start game modal
