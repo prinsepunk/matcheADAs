@@ -23,7 +23,7 @@ const createBoard = (lv) =>{
             gridJS[i][j] = getItemRandom(items);
         }
     }
-    time = 300;
+    time = 30;
     gameTime(time);
     gridToHTML(lv);
     return lv;
