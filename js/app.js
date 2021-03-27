@@ -8,6 +8,7 @@ let lv;
 let welcomeModal = true;
 let points = 0;
 let time;
+// let canMove = true;
 
                     // GRID GENERATOR
 
@@ -55,33 +56,79 @@ const squareGenerator = (i, j) =>{
 }
 
                     // GAME FUNCTIONS
+                    
+// Swap items
+const swapElement = (square1, square2) =>{
+    let width = 50;
+    const datax1 = Number(square1.dataset.x);
+    const datay1 = Number(square1.dataset.y);
+    const datax2 = Number(square2.dataset.x);
+    const datay2 = Number(square2.dataset.y);
+                    
+    let tempVar = gridJS[datax1][datay1];
+    gridJS[datax1][datay1] = gridJS[datax2][datay2];
+    gridJS[datax2][datay2] = tempVar;
+                     
+    square1.style.top = `${datay2 * width}px`
+    square1.style.left = `${datax2 * width}px`
+    square2.style.top = `${datay1 * width}px`
+    square2.style.left = `${datax1 * width}px`
 
-// Select each item
-const selectedItem = (e) =>{
+    square1.dataset.x = datax2
+    square1.dataset.y = datay2
+    square2.dataset.x = datax1
+    square2.dataset.y = datay1
+
+    // if(datax1 === datax2 && (datay1 === datay2 + 1 || datay1 === datay2 -1)){
+    //     square1.innerHTML = gridJS[datax1][datay1];
+    //     square2.innerHTML = gridJS[datax2][datay2];
+                    
+    // } else if(datay1 === datay2 && (datax1 === datax2 +1 || datax1 === datax2 -1)){
+    //     square1.innerHTML = gridJS[datax1][datay1];
+    //     square2.innerHTML = gridJS[datax2][datay2];
+    // }
+    }
+    
+    // Select each item
+    const selectedItem = (e) =>{
+    // canMove = false;
     let click = document.querySelector('.selected');
     if(click){
         if (adjacent(click, e.target)) {
-            let resultVertical = checkVerticalMatches(gridJS);
-            let resultHorizontal = checkHorizontalMatches(gridJS);
-
             swapElement(click, e.target);
             click.classList.remove('selected');
+            setTimeout(() => {
+                if(searchMatches()){
+                    checkVerticalMatches(gridJS);
+                    checkHorizontalMatches(gridJS);
+                } else{
+                    swapElement(click, e.target)
+                    // canMove = true;
+                }
+            }, 200);
 
-            if (resultHorizontal === false && resultVertical === false) {
-                setTimeout(() => {
-                  swapElement(click, e.target);
-                }, 500);
-            }
+            // let resultVertical = checkVerticalMatches(gridJS);
+            // let resultHorizontal = checkHorizontalMatches(gridJS);
 
-            if(resultVertical === true || resultHorizontal === true){
-                checkVerticalMatches(gridJS);
-                checkHorizontalMatches(gridJS);
-            } else{
-                console.log('sin punto')
-            }
+            
+            // click.classList.remove('selected');
+
+            // if (resultHorizontal === false && resultVertical === false) {
+            //     setTimeout(() => {
+            //       swapElement(click, e.target);
+            //     }, 500);
+            // }
+
+            // if(resultVertical === true || resultHorizontal === true){
+            //     checkVerticalMatches(gridJS);
+            //     checkHorizontalMatches(gridJS);
+            // } else{
+            //     console.log('sin punto')
+            // }
         } else{
             click.classList.remove('selected');
             e.target.classList.add('selected');
+            // canMove = true;
         }
     } else{
         e.target.classList.add('selected');
@@ -106,26 +153,6 @@ const adjacent = (square1, square2)=>{
     }
 }
 
-// Swap items
-const swapElement = (square1, square2) =>{
-    const datax1 = Number(square1.dataset.x);
-    const datay1 = Number(square1.dataset.y);
-    const datax2 = Number(square2.dataset.x);
-    const datay2 = Number(square2.dataset.y);
-
-    let tempVar = gridJS[datax1][datay1];
-    gridJS[datax1][datay1] = gridJS[datax2][datay2];
-    gridJS[datax2][datay2] = tempVar;
-    
-    if(datax1 === datax2 && (datay1 === datay2 + 1 || datay1 === datay2 -1)){
-        square1.innerHTML = gridJS[datax1][datay1];
-        square2.innerHTML = gridJS[datax2][datay2];
-
-    } else if(datay1 === datay2 && (datax1 === datax2 +1 || datax1 === datax2 -1)){
-        square1.innerHTML = gridJS[datax1][datay1];
-        square2.innerHTML = gridJS[datax2][datay2];
-    }
-}
 
 // Look for horizontal matches and erase them
 const checkHorizontalMatches = (gridJS) =>{
@@ -181,6 +208,21 @@ const checkVerticalMatches = (gridJS) =>{
         }
     }
     return result;
+}
+
+const searchMatches = () => {
+    const horizontalMatches = checkHorizontalMatches(gridJS)
+    const verticalMatches = checkVerticalMatches(gridJS)
+  
+    if (horizontalMatches && verticalMatches) {
+      return [horizontalMatches, verticalMatches]
+    } else if (horizontalMatches) {
+      return [horizontalMatches]
+    } else if (verticalMatches) {
+      return [verticalMatches]
+    } else {
+      return null
+    }
 }
 
                      // FUNCTIONS: MODALES
