@@ -48,6 +48,7 @@ const squareGenerator = (i, j) =>{
     square.dataset.x = i;
     square.dataset.y = j;
     square.innerText = gridJS[i][j];
+    // square.classList.add("square");
     square.style.top = `${i * 50}px`;
     square.style.left = `${j * 50}px`;
     square.addEventListener('click', selectedItem)
@@ -76,8 +77,10 @@ const selectedItem = (e) =>{
             if(resultVertical === true || resultHorizontal === true){
                 checkVerticalMatches(gridJS);
                 checkHorizontalMatches(gridJS);
+                // dropVertical(rowsToDrop, columnsToReplace);
+                // dropHorizontal(columnToDrop, rowsToReplace);
             } else{
-                console.log('sin punto')
+                // console.log('sin punto')
             }
         } else{
             click.classList.remove('selected');
@@ -127,9 +130,19 @@ const swapElement = (square1, square2) =>{
     }
 }
 
+// CHECK MATCHES
+
+let columnsToDrop = 0;
+let rowsToReplace = []
+
+let rowsToDrop = 0;
+let columnsToReplace = [];
+
 // Look for horizontal matches and erase them
 const checkHorizontalMatches = (gridJS) =>{
     let result = false;
+    columnsToDrop = 0;
+    rowsToReplace = [];
     for (let i = 0; i < gridJS.length; i++) {
         for (let j = 0; j < gridJS[i].length; j++) {
             if(gridJS[i][j] === gridJS[i][j+1] && gridJS[i][j] === gridJS[i][j+2] && gridJS[i][j] === gridJS[i][j+3] && gridJS[i][j] === gridJS[i][j+4]){
@@ -139,29 +152,47 @@ const checkHorizontalMatches = (gridJS) =>{
                 gridJS[i][j+2] = '';
                 gridJS[i][j+3] = '';
                 gridJS[i][j+4] = '';
-                gridToHTML(lv)
+                columnsToDrop = i;
+                rowsToReplace.push(j, j+1, j+2, j+3, j+4)
+                setTimeout(() => {
+                    fillGrid(gridJS);
+                    gridToHTML(lv)
+                }, 500);
             } else if(gridJS[i][j] === gridJS[i][j+1] && gridJS[i][j] === gridJS[i][j+2] && gridJS[i][j] === gridJS[i][j+3]){
                 result = true;
                 gridJS[i][j] = '';
                 gridJS[i][j+1] = '';
                 gridJS[i][j+2] = '';
                 gridJS[i][j+3] = '';
-                gridToHTML(lv)
+                columnsToDrop = i;
+                rowsToReplace.push(j, j+1, j+2, j+3)
+                setTimeout(() => {
+                    fillGrid(gridJS);
+                    gridToHTML(lv)
+                }, 500);
             }else if(gridJS[i][j] === gridJS[i][j+1] && gridJS[i][j] === gridJS[i][j+2]){
                 result = true;
                 gridJS[i][j] = '';
                 gridJS[i][j+1] = '';
                 gridJS[i][j+2] = '';
-                gridToHTML(lv)
+                columnsToDrop = i;
+                rowsToReplace.push(j, j+1, j+2)
+                setTimeout(() => {
+                    fillGrid(gridJS);
+                    gridToHTML(lv)
+                }, 500);
             }
         }
     }
-    return result;
+    console.log(`columnstodrop: ${columnsToDrop}, rowstoreplace: ${rowsToReplace}`)
+    return result, columnsToDrop, rowsToReplace;
 }
 
 // Look for vertical matches and erase them
 const checkVerticalMatches = (gridJS) =>{
     let result = false;
+    rowsToDrop = 0;
+    columnsToReplace = [];
     for (let i = 3; i < gridJS.length; i++) {
         for (let j = 0; j < gridJS[i].length; j++) {
             if(gridJS[i][j] === gridJS[i-1][j] && gridJS[i][j] === gridJS[i-2][j] && gridJS[i][j] === gridJS[i-3][j]){
@@ -170,17 +201,43 @@ const checkVerticalMatches = (gridJS) =>{
                 gridJS[i-1][j] = '';
                 gridJS[i-2][j] = '';
                 gridJS[i-3][j] = '';
-                gridToHTML(lv)
+                rowsToDrop = j;
+                columnsToReplace.push(i, i-1, i-2, i-3);
+                setTimeout(() => {
+                    fillGrid(gridJS);
+                    gridToHTML(lv)
+                }, 500);
             }else if(gridJS[i][j] === gridJS[i-1][j] && gridJS[i][j] === gridJS[i-2][j]){
                 result = true;
                 gridJS[i][j] = '';
                 gridJS[i-1][j] = '';
                 gridJS[i-2][j] = '';
-                gridToHTML(lv)
+                rowsToDrop = j;
+                columnsToReplace.push(i, i-1, i-2);
+                setTimeout(() => {
+                    fillGrid(gridJS);
+                    gridToHTML(lv)
+                }, 500);
             }
         }
     }
-    return result;
+    // fillGrid(gridJS);
+    console.log(`rowstodrop: ${rowsToDrop}, columnstoreplace: ${columnsToReplace}`)
+    return result, rowsToDrop, columnsToReplace;
+}
+
+// Fill blank spaces
+
+const fillGrid = (gridJS) =>{
+    for (let i = 0; i < gridJS.length; i++) {
+        for (let j = 0; j < gridJS[i].length; j++) {
+            if(gridJS[i][j] === ''){
+                console.log('rellenando espacios')
+                gridJS[i][j] = getItemRandom(items);
+                // gridToHTML(lv)
+            }
+        }
+    }
 }
 
                      // FUNCTIONS: MODALES
@@ -233,6 +290,8 @@ const playAgain = () =>{
                 createBoard(lv);
                 checkVerticalMatches(gridJS);
                 checkHorizontalMatches(gridJS);
+                // dropVertical(rowsToDrop, columnsToReplace);
+                // dropHorizontal(columnToDrop, rowsToReplace);
                 gridToHTML(lv)
                 break;
        
@@ -241,6 +300,8 @@ const playAgain = () =>{
                 createBoard(lv);
                 checkVerticalMatches(gridJS);
                 checkHorizontalMatches(gridJS);
+                // dropVertical(rowToDrop, columnsToReplace);
+                // dropHorizontal(columnToDrop, rowsToReplace);
                 gridToHTML(lv)
                 break;
                 
@@ -250,6 +311,8 @@ const playAgain = () =>{
                 createBoard(lv);
                 checkVerticalMatches(gridJS);
                 checkHorizontalMatches(gridJS);
+                // dropVertical(rowToDrop, columnsToReplace);
+                // dropHorizontal(columnToDrop, rowsToReplace);
                 gridToHTML(lv)
                 break;
         }
@@ -348,3 +411,73 @@ const gameTime = () => {
 const timeStop = () =>{
     clearInterval(stop);
 }
+
+
+
+
+
+// Drop new random emojis in array
+
+// const dropHorizontal = (columnsToDrop, rowsToReplace) => {
+//     for (let i = columnToDrop; i >= 0; i--) {
+//       rowsToReplace.forEach((el) => {
+//         gridJS[i][el] =
+//           i !== 0 ? gridJS[i - 1][el] : getItemRandom(items);
+//       });
+//     }
+//     dropHorizontalHTML(columnsToDrop, rowsToReplace);
+// };
+  
+// const dropVertical = (rowsToDrop, ...columnsToReplace) => {
+//     const restReverse = columnsToReplace.reverse();
+//     for (let i = restReverse[0]; i >= 0; i--) {
+//     //   console.log();
+//       restReverse.forEach((el) => {
+//         gridJS[el][rowsToDrop] =
+//           i !== 0 ? gridJS[i - 1][rowsToDrop] : getItemRandom(items);
+//       });
+//     }
+//     dropVertical(rowsToDrop, columnsToReplace);
+//     return gridJS;
+// };
+
+// // Print new emoji in HTML
+// const printNewEmoji = (j, slot) => {
+//     slot.innerHTML = gridJS[0][j];
+//     return slot.innerHTML;
+// };
+
+// // Clean deleted emojis 
+
+// const cleanEmojis = (x, rest) => {
+//     rest.forEach((y) => {
+//     //   points += 100;
+//       let toClean = grid.querySelector(`.square[data-x= "${x}"][data-y= "${y}"]`);
+//       toClean.innerHTML = "";
+//     //   pointsCounter.innerHTML = `${points}`;
+//     });
+//     // return points;
+// };
+
+// // Drop new emojis in HTML
+
+// const dropHorizontalHTML = (columnsToDrop, rowsToReplace) => {
+//     cleanEmojis(columnToDrop, rowsToReplace);
+//     setTimeout(() => {
+//       for (let i = columnToDrop; i >= 0; i--) {
+//         rest.forEach((el) => {
+//           let empty = grid.querySelector(
+//             `.square[data-x= "${i}"][data-y= "${el}"]`
+//           );
+//           let full = grid.querySelector(
+//             `.square[data-x= "${i - 1}"][data-y= "${el}"]`
+//           );
+//           empty.innerHTML = i !== 0 ? full.innerHTML : printNewEmoji(el, empty);
+//         });
+//       }
+//     }, 800);
+// };
+
+// const dropVerticalHTML = (x, rest) =>{
+
+// }
