@@ -8,7 +8,7 @@ let lv;
 let welcomeModal = true;
 let points = 0;
 let time;
-// let canMove = true;
+let puedeMover = true
 
                     // GRID GENERATOR
 
@@ -78,20 +78,11 @@ const swapElement = (square1, square2) =>{
     square1.dataset.y = datay2
     square2.dataset.x = datax1
     square2.dataset.y = datay1
-
-    // if(datax1 === datax2 && (datay1 === datay2 + 1 || datay1 === datay2 -1)){
-    //     square1.innerHTML = gridJS[datax1][datay1];
-    //     square2.innerHTML = gridJS[datax2][datay2];
-                    
-    // } else if(datay1 === datay2 && (datax1 === datax2 +1 || datax1 === datax2 -1)){
-    //     square1.innerHTML = gridJS[datax1][datay1];
-    //     square2.innerHTML = gridJS[datax2][datay2];
-    // }
-    }
+}
     
     // Select each item
-    const selectedItem = (e) =>{
-    // canMove = false;
+const selectedItem = (e) =>{
+    puedeMover = false
     let click = document.querySelector('.selected');
     if(click){
         if (adjacent(click, e.target)) {
@@ -99,36 +90,17 @@ const swapElement = (square1, square2) =>{
             click.classList.remove('selected');
             setTimeout(() => {
                 if(searchMatches()){
-                    checkVerticalMatches(gridJS);
-                    checkHorizontalMatches(gridJS);
+                    checkVerticalMatches();
+                    checkHorizontalMatches();
                 } else{
                     swapElement(click, e.target)
-                    // canMove = true;
+                    puedeMover = true
                 }
             }, 200);
-
-            // let resultVertical = checkVerticalMatches(gridJS);
-            // let resultHorizontal = checkHorizontalMatches(gridJS);
-
-            
-            // click.classList.remove('selected');
-
-            // if (resultHorizontal === false && resultVertical === false) {
-            //     setTimeout(() => {
-            //       swapElement(click, e.target);
-            //     }, 500);
-            // }
-
-            // if(resultVertical === true || resultHorizontal === true){
-            //     checkVerticalMatches(gridJS);
-            //     checkHorizontalMatches(gridJS);
-            // } else{
-            //     console.log('sin punto')
-            // }
         } else{
             click.classList.remove('selected');
             e.target.classList.add('selected');
-            // canMove = true;
+            puedeMover = true
         }
     } else{
         e.target.classList.add('selected');
@@ -153,62 +125,141 @@ const adjacent = (square1, square2)=>{
     }
 }
 
+const checkHorizontalMatches = () => {
+    for (let i = 0; i < gridJS.length; i++) {
+      for (let j = 0; j < gridJS[i].length; j++) {
+        let iguales = 0
+  
+        for (let k = j; k <= gridJS[i].length; k++) {
+          if (gridJS[i][j] === gridJS[i][k]) {
+            console.log('horizontal')
+            iguales++
+          } else {
+            if (iguales >= 3) {
+                console.log('horizontal')
+                return { x: j, y: i, columnas: iguales }
+            } else {
+                console.log('horizontal')
+                iguales = 1
+                j = k
+            }
+          }
+        }
+      }
+    }
+}
+  
+const checkVerticalMatches = () => {
+    for (let j = 0; j < gridJS[0].length; j++) {
+      for (let i = 0; i < gridJS.length; i++) {
+        let iguales = 0
+  
+        for (let k = i; k <= gridJS.length; k++) {
+          if (gridJS[k] && gridJS[i][j] === gridJS[k][j]) {
+            console.log('vertical')
+            iguales++
+          } else {
+            if (iguales >= 3) {
+                console.log('vertical')
+                return { x: j, y: i, filas: iguales }
+            }
+            console.log('vertical')
+            iguales = 1
+            i = k
+          }
+        }
+      }
+    }
+}
+
 
 // Look for horizontal matches and erase them
-const checkHorizontalMatches = (gridJS) =>{
-    let result = false;
-    for (let i = 0; i < gridJS.length; i++) {
-        for (let j = 0; j < gridJS[i].length; j++) {
-            if(gridJS[i][j] === gridJS[i][j+1] && gridJS[i][j] === gridJS[i][j+2] && gridJS[i][j] === gridJS[i][j+3] && gridJS[i][j] === gridJS[i][j+4]){
-                result = true;
-                gridJS[i][j] = '';
-                gridJS[i][j+1] = '';
-                gridJS[i][j+2] = '';
-                gridJS[i][j+3] = '';
-                gridJS[i][j+4] = '';
-                gridToHTML(lv)
-            } else if(gridJS[i][j] === gridJS[i][j+1] && gridJS[i][j] === gridJS[i][j+2] && gridJS[i][j] === gridJS[i][j+3]){
-                result = true;
-                gridJS[i][j] = '';
-                gridJS[i][j+1] = '';
-                gridJS[i][j+2] = '';
-                gridJS[i][j+3] = '';
-                gridToHTML(lv)
-            }else if(gridJS[i][j] === gridJS[i][j+1] && gridJS[i][j] === gridJS[i][j+2]){
-                result = true;
-                gridJS[i][j] = '';
-                gridJS[i][j+1] = '';
-                gridJS[i][j+2] = '';
-                gridToHTML(lv)
-            }
-        }
-    }
-    return result;
-}
+// const checkHorizontalMatches = (gridJS) =>{
+//     let result = false;
+//     for (let i = 0; i < gridJS.length; i++) {
+//         for (let j = 0; j < gridJS[i].length; j++) {
+//             if(gridJS[i][j] === gridJS[i][j+1] && gridJS[i][j] === gridJS[i][j+2] && gridJS[i][j] === gridJS[i][j+3] && gridJS[i][j] === gridJS[i][j+4]){
+//                 result = true;
+//                 gridJS[i][j] = '';
+//                 gridJS[i][j+1] = '';
+//                 gridJS[i][j+2] = '';
+//                 gridJS[i][j+3] = '';
+//                 gridJS[i][j+4] = '';
+//                 gridToHTML(lv)
+//             } else if(gridJS[i][j] === gridJS[i][j+1] && gridJS[i][j] === gridJS[i][j+2] && gridJS[i][j] === gridJS[i][j+3]){
+//                 result = true;
+//                 gridJS[i][j] = '';
+//                 gridJS[i][j+1] = '';
+//                 gridJS[i][j+2] = '';
+//                 gridJS[i][j+3] = '';
+//                 gridToHTML(lv)
+//             }else if(gridJS[i][j] === gridJS[i][j+1] && gridJS[i][j] === gridJS[i][j+2]){
+//                 result = true;
+//                 gridJS[i][j] = '';
+//                 gridJS[i][j+1] = '';
+//                 gridJS[i][j+2] = '';
+//                 gridToHTML(lv)
+//             }
+//         }
+//     }
+//     return result;
+// }
 
 // Look for vertical matches and erase them
-const checkVerticalMatches = (gridJS) =>{
-    let result = false;
-    for (let i = 3; i < gridJS.length; i++) {
-        for (let j = 0; j < gridJS[i].length; j++) {
-            if(gridJS[i][j] === gridJS[i-1][j] && gridJS[i][j] === gridJS[i-2][j] && gridJS[i][j] === gridJS[i-3][j]){
-                result = true;
-                gridJS[i][j] = '';
-                gridJS[i-1][j] = '';
-                gridJS[i-2][j] = '';
-                gridJS[i-3][j] = '';
-                gridToHTML(lv)
-            }else if(gridJS[i][j] === gridJS[i-1][j] && gridJS[i][j] === gridJS[i-2][j]){
-                result = true;
-                gridJS[i][j] = '';
-                gridJS[i-1][j] = '';
-                gridJS[i-2][j] = '';
-                gridToHTML(lv)
-            }
-        }
-    }
-    return result;
-}
+// const checkVerticalMatches = (gridJS) =>{
+//     let result = false;
+//     for (let i = 3; i < gridJS.length; i++) {
+//         for (let j = 0; j < gridJS[i].length; j++) {
+//             if(gridJS[i][j] === gridJS[i-1][j] && gridJS[i][j] === gridJS[i-2][j] && gridJS[i][j] === gridJS[i-3][j]){
+//                 result = true;
+//                 gridJS[i][j] = '';
+//                 gridJS[i-1][j] = '';
+//                 gridJS[i-2][j] = '';
+//                 gridJS[i-3][j] = '';
+//                 gridToHTML(lv)
+//             }else if(gridJS[i][j] === gridJS[i-1][j] && gridJS[i][j] === gridJS[i-2][j]){
+//                 result = true;
+//                 gridJS[i][j] = '';
+//                 gridJS[i-1][j] = '';
+//                 gridJS[i-2][j] = '';
+//                 gridToHTML(lv)
+//             }
+//         }
+//     }
+//     return result;
+// }
+
+// const checkVerticalMatches = (gridJS) => {
+//     let result = false;
+//     // rowToDrop = 0;
+//     // columnsToReplace = [];
+//     let coincidences = 0;
+//     for (let j = 0; j < gridJS[0].length; j++) {
+//       for (let i = 0; i < gridJS.length; i++) {
+//         for (let u = 0; u < gridJS.length; u++) {
+//           if (gridJS[i][j] === gridJS[u][j]) {
+//             result = true;
+//             console.log('3')
+//             coincidences++;
+//             // columnsToReplace.push(Number(u));
+//             // rowToDrop = j;
+//           } else {
+//             if (coincidences >= 3) {
+//                 result = true;
+//                 console.log('4')
+//             //   return columnsToReplace, rowToDrop;
+//             } else {
+//                 console.log('no')
+//             //   rowToDrop = 0;
+//             //   columnsToReplace = [];
+//             }
+//           }
+//         }
+//       }
+//     }
+//     // console.log(columnsToReplace);
+//     // return rowToDrop, columnsToReplace;
+//   };
 
 const searchMatches = () => {
     const horizontalMatches = checkHorizontalMatches(gridJS)
@@ -273,16 +324,16 @@ const playAgain = () =>{
             case "easy":
                 lv = 9;
                 createBoard(lv);
-                checkVerticalMatches(gridJS);
-                checkHorizontalMatches(gridJS);
+                checkVerticalMatches();
+                checkHorizontalMatches();
                 gridToHTML(lv)
                 break;
        
             case "normal":
                 lv = 8;
                 createBoard(lv);
-                checkVerticalMatches(gridJS);
-                checkHorizontalMatches(gridJS);
+                checkVerticalMatches();
+                checkHorizontalMatches();
                 gridToHTML(lv)
                 break;
                 
@@ -290,8 +341,8 @@ const playAgain = () =>{
             case "difficult":
                 lv = 7;
                 createBoard(lv);
-                checkVerticalMatches(gridJS);
-                checkHorizontalMatches(gridJS);
+                checkVerticalMatches();
+                checkHorizontalMatches();
                 gridToHTML(lv)
                 break;
         }
